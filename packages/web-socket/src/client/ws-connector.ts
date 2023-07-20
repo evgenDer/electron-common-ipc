@@ -124,8 +124,13 @@ export class WsConnector extends IpcBusConnectorImpl {
             return Promise.resolve();
         }
 
-        this._socket.off('close', this._onSocketClose);
+        if (this._socket.readyState === WebSocket.CONNECTING) {
+            this._socket.emit('error', new Error('[WsConnector] Shutdown during connection...'));
+            return Promise.resolve();
+        }
+
         this._socket.off('error', this._onSocketError);
+        this._socket.off('close', this._onSocketClose);
         this._socket.off('message', this._onSocketData);
         this._socket.removeAllListeners();
         return new Promise<void>((resolve) => {

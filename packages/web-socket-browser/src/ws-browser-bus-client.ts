@@ -170,6 +170,14 @@ export class WsBrowserBusClient extends IpcBusClientImpl {
             try {
                 return await defer(() => {
                     this._logger?.info(`[WsBrowserBusClient ${this.peer?.id}] Reconnecting...`);
+
+                    if (!this.peer) {
+                        this.peer = {
+                            id: this._uuid(),
+                            type: this._transport.connector.type,
+                        };
+                    }
+
                     return this.connectInternal(this._lastConnectionOptions);
                 }, this._reconnectOptions.await);
             } catch (err) {

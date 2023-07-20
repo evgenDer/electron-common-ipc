@@ -19,14 +19,14 @@ export class IpcBusClientImpl implements IpcBusClient, IpcBusTransportClient {
     private readonly _connectCloseState: ConnectionState;
 
     constructor(
-        uuid: UuidProvider,
+        protected readonly _uuid: UuidProvider,
         private readonly _emitter: EventEmitterLike<IpcBusListener>,
-        private readonly _transport: IpcBusTransport
+        protected readonly _transport: IpcBusTransport
     ) {
         this._emitter.setMaxListeners?.(0);
         this._connectCloseState = new ConnectionState();
         this.peer = {
-            id: uuid(),
+            id: _uuid(),
             type: this._transport.connector.type,
         };
     }

@@ -80,9 +80,9 @@ export class WsBrowserConnector extends IpcBusConnectorImpl {
         let onSocketOpen: (event: Event) => void;
         this.removeTempListeners?.();
         this.removeTempListeners = () => {
-            this._socket.removeEventListener('error', onSocketError);
-            this._socket.removeEventListener('close', onSocketClose);
-            this._socket.removeEventListener('open', onSocketOpen);
+            this._socket?.removeEventListener('error', onSocketError);
+            this._socket?.removeEventListener('close', onSocketClose);
+            this._socket?.removeEventListener('open', onSocketOpen);
         };
         const fallbackReject = (message: string, reject: (e: Error) => void) => {
             this.removeTempListeners?.();

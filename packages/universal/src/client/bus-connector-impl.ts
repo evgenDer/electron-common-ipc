@@ -1,5 +1,5 @@
 import { IpcBusCommandKind } from '../contract/ipc-bus-command';
-import { CheckTimeoutOptions, createContextId } from '../utils';
+import { Constants, CheckTimeoutOptions, createContextId } from '../utils';
 import { ConnectionState } from '../utils/connection-state';
 import { executeInTimeout } from '../utils/execute-in-timeout';
 
@@ -34,7 +34,7 @@ export abstract class IpcBusConnectorImpl implements IpcBusConnector {
         options: ClientConnectOptions
     ): Promise<ConnectorHandshake> {
         const handshake = await this._connectCloseState.connect<ConnectorHandshake>(() => {
-            options = CheckTimeoutOptions(options);
+            options = CheckTimeoutOptions(options, Constants.HandshakeTimeout);
             return executeInTimeout(
                 options.timeoutDelay,
                 async (resolve, reject) => {

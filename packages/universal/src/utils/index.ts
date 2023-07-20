@@ -3,15 +3,16 @@ import { IpcBusProcessType } from '../contract/ipc-bus-peer';
 import type { IpcConnectOptions, IpcTimeoutOptions } from '../client/ipc-connect-options';
 import type { IpcBusPeer } from '../contract/ipc-bus-peer';
 
-/* 
+/*
 This number is used to the javascript context.
 We cannot introduce the notion of the process into
 Universal library, so we will use this contextId
 */
 const executionContextId = String(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER));
 
-const enum Constants {
+export const enum Constants {
     IpcBusTimeout = 2000,
+    HandshakeTimeout = 30000,
 }
 
 const enum Win32Pipes {
@@ -77,11 +78,14 @@ export function CheckChannel(channel: unknown): string {
     }
 }
 
-export function CheckTimeoutOptions(val?: IpcTimeoutOptions): IpcTimeoutOptions {
-    val = val || { timeoutDelay: Constants.IpcBusTimeout };
+export function CheckTimeoutOptions(
+    val: IpcTimeoutOptions = null,
+    defaultTimeout = Constants.IpcBusTimeout
+): IpcTimeoutOptions {
+    val = val || { timeoutDelay: defaultTimeout };
 
     if (val.timeoutDelay === undefined) {
-        val.timeoutDelay = Constants.IpcBusTimeout;
+        val.timeoutDelay = defaultTimeout;
     }
 
     return val;
